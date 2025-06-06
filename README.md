@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="docs/markdown.css">
 
+## Experimental online playground at https://mingodad.github.io/rex-parser-generator
+
 # 👑 **REx Parser Generator**
 
 Parser and lexer generation from EBNF, multiple parsing algorithms, multiple target languages.
