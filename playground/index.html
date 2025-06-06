@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Rex Parser Playground</title>
+<!--<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">-->
+<link rel="stylesheet" href="style.css" media="all">
+</head>
+<body onload="doFinalSettings()">
+<noscript>This application need WASM and JavaScript !</noscript>
+<div id="main">
+  <div class="editor-container">
+    <ul class="editor-header">
+      <li><span><span id="grammar-validation" class="validation"></span></span></li>
+      <li><span>Grammar</span></li>
+      <li class="editor-options">
+        <ul class="editor-header-options">
+          <li class="option"><label for="opt-samples">Examples </label>
+            <select id="opt-samples" onchange="load_example(this)">
+              <option>choose</option>
+            </select>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <pre id="grammar-editor" class="editor-area">{{syntax}}</pre>
+    <div id="grammar-info" class="editor-info"></div>
+  </div>
+  <div class="editor-container">
+    <ul class="editor-header">
+      <li><span><span id="code-validation" class="validation"></span></span></li>
+      <li><span>Input source</span></li>
+      <li class="editor-options">
+        <ul class="editor-header-options">
+          <li class="option"><label>Command line: </label><input id="start-rule" type="text"></li>
+          <li class="option"><button id="parse" class="parse">Parse</button></li>
+	  <li><a href="https://github.com/mingodad/rex-parser-generator/tree/dad-play"><svg height="26" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
+    <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+</svg></a></li>
+        </ul>
+      </li>
+    </ul>
+    <pre id="code-editor" class="editor-area">{{source}}</pre>
+    <div class="editor-sub-header"><label for="show-code"><input id="show-code" class="show-toggle" type="checkbox">Code</label></div>
+    <pre id="code-code" class="editor-area"></pre>
+    <div class="editor-sub-header">
+       <label for="show-output"><input id="show-output" class="show-toggle" type="checkbox">Output</label>
+    </div>
+    <pre id="code-output" class="editor-area"></pre>
+    <div id="code-info" class="editor-info"></div>
+  </div>
+</div>
+<div id="overlay"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="index.js"></script>
+<script src="rex_playground.js"></script>
+</body>
+</html>
