@@ -374,6 +374,7 @@ function setupToolWindow(lsKeyName, buttonSel, codeSel) {
 }
 setupToolWindow('show-code', '#show-code', '#code-code');
 setupToolWindow('show-output', '#show-output', '#code-output');
+$('#show-code').prop('checked', true);
 
 // Show page
 $('#main').css({

@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="docs/markdown.css">
 
-## Experimental online playground at https://mingodad.github.io/rex-parser-generator
+### Experimental online playground at https://mingodad.github.io/rex-parser-generator
 
 # 👑 **REx Parser Generator**
 
