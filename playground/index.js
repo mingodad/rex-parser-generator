@@ -314,7 +314,18 @@ function parse() {
 	let fname = file_list[idx];
 	if(fname.toLowerCase().indexOf(grammar_fname_base) == 0) {
 		if(fname.indexOf(grammar_fname_ext) < 0) {
-			//codeCode.getSession().setMode("ace/mode/javascript");
+			let fname_ext = fname.slice(fname.indexOf("."));
+			//console.log(fname, fname_ext);
+			switch(fname_ext){
+				case ".js": codeCode.getSession().setMode("ace/mode/javascript"); break;
+				case ".hpp": codeCode.getSession().setMode("ace/mode/c_cpp"); break;
+				case ".java": codeCode.getSession().setMode("ace/mode/java"); break;
+				case ".go": codeCode.getSession().setMode("ace/mode/go"); break;
+				case ".cs": codeCode.getSession().setMode("ace/mode/csharp"); break;
+				case ".py": codeCode.getSession().setMode("ace/mode/python"); break;
+				case ".xml": codeCode.getSession().setMode("ace/mode/xml"); break;
+				default: codeCode.getSession().setMode("ace/mode/text");
+			}
 			codeCode.setValue(FS.readFile(fname, { encoding: 'utf8' }));
 			break;
 		}
