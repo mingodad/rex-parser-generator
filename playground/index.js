@@ -83,13 +83,29 @@ onbeforeunload= function(event) { updateLocalStorage(); };
 
 const sampleList = [
 	//title, grammar, input, input ace syntax
-	["antlr parser", "Java.ebnf", "test.java", "ace/mode/java"],
+	["abnf parser", "abnf.ebnf", "test.abnf", "ace/mode/text", ""],
+	["antlr3 parser", "antlr_3.ebnf", "test.antlr_3", "ace/mode/text", "-backtrack"],
+	["antlr4 parser", "antlr_4.ebnf", "test.antlr_4", "ace/mode/text", "-backtrack"],
+	["bison parser", "bison.ebnf", "test.bison", "ace/mode/text", ""],
+	["gold parser", "gold.ebnf", "test.gold", "ace/mode/text", "-backtrack"],
+	["instaparse parser", "instaparse.ebnf", "test.instaparse", "ace/mode/text", "-lalr 4"],
+	["ixml parser", "ixml.ebnf", "test.ixml", "ace/mode/text", "-glr 1"],
+	["javacc parser", "javacc.ebnf", "test.javacc", "ace/mode/text", "-backtrack"],
+	["jison parser", "jison.ebnf", "test.jison", "ace/mode/text", ""],
+	["pegjs parser", "pegjs.ebnf", "test.pegjs", "ace/mode/text", ""],
+	["pss parser", "pss.ebnf", "test.java", "ace/mode/text", ""],
+	["regexp parser", "regexp.ebnf", "test.java", "ace/mode/text", ""],
+	["rex-5.9 parser", "rex_5_9.ebnf", "test.java", "ace/mode/text", ""],
+	["rr parser", "rr.ebnf", "rr.ebnf", "ace/mode/text", ""],
+	["w3c parser", "w3c.ebnf", "test.w3c", "ace/mode/text", ""],
+	["xtext parser", "xtext.ebnf", "test.xtext", "ace/mode/text", ""],
+
 	//["EcmaScript parser", "EcmaScript.ebnf", "test.java", "ace/mode/java"],
 	["Java parser", "Java.ebnf", "test.java", "ace/mode/java"],
 	["Java-18 parser", "java_18.ebnf", "test.java", "ace/mode/java"],
 	//["JSONiq parser", "JSONiqParser.ebnf", "test.java", "ace/mode/java"],
 	["rex parser", "EbnfParser_naked.ebnf", "EbnfParser_naked.ebnf", "ace/mode/text"],
-	["turtle parser", "turtle.ebnf", "EbnfParser_naked.ebnf", "ace/mode/text"],
+	["turtle parser", "turtle.ebnf", "test.turtle", "ace/mode/text"],
 ];
 
 function load_example(self) {

@@ -1,0 +1,6 @@
+(def as-and-bs-alternative
+  (insta/parser
+    "S:={AB}  ;
+     AB ::= (A, B)
+     A : \"a\" + ;
+     B ='b' + ;"))
