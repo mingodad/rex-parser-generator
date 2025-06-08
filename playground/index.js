@@ -316,15 +316,20 @@ function parse() {
 		if(fname.indexOf(grammar_fname_ext) < 0) {
 			let fname_ext = fname.slice(fname.indexOf("."));
 			//console.log(fname, fname_ext);
+			$("#runjs").attr("disabled", true);
 			switch(fname_ext){
-				case ".js": codeCode.getSession().setMode("ace/mode/javascript"); break;
+				case ".js":
+					codeCode.getSession().setMode("ace/mode/javascript");
+					$("#runjs").attr("disabled", false);
+				break;
 				case ".hpp": codeCode.getSession().setMode("ace/mode/c_cpp"); break;
 				case ".java": codeCode.getSession().setMode("ace/mode/java"); break;
 				case ".go": codeCode.getSession().setMode("ace/mode/go"); break;
 				case ".cs": codeCode.getSession().setMode("ace/mode/csharp"); break;
 				case ".py": codeCode.getSession().setMode("ace/mode/python"); break;
 				case ".xml": codeCode.getSession().setMode("ace/mode/xml"); break;
-				default: codeCode.getSession().setMode("ace/mode/text");
+				default:
+					codeCode.getSession().setMode("ace/mode/text");
 			}
 			codeCode.setValue(FS.readFile(fname, { encoding: 'utf8' }));
 			break;
