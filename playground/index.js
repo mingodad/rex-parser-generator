@@ -348,9 +348,9 @@ $('#code-info').on('click', 'li', makeOnClickInInfo(codeEditor));
 //Command line helper
 function getCmdLine() {
 	let cmd_line_input = document.getElementById("command-line");
-	let value = cmd_line_input.value;
+	let value = cmd_line_input.value.trim();
+	if(value.length == 0) return [];
 	value = value.replace(/\s+/g, " ");
-	if(value == " " || value.length == 0) return [];
 	//console.log(cmd_line_input.value, value);
 	return value.split(' ');
 }
