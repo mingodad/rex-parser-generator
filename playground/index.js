@@ -138,7 +138,7 @@ function textToErrors(str) {
   var regExp = /([^\n]+?)\n/g, match;
   while (match = regExp.exec(str)) {
     let msg = match[1];
-    let line_col = msg.match(/error:(\d+):(\d+):/);
+    let line_col = msg.match(/error: line (\d+), column (\d+):/);
     if (line_col) {
       errors.push({"ln": line_col[1], "col":line_col[2], "msg": msg});
     } else {
@@ -153,7 +153,7 @@ function generateErrorListHTML(errors) {
 
   html += $.map(errors, function (x) {
     if (x.ln > 0) {
-      return '<li data-ln="' + x.ln + '" data-col="' + x.col +
+      return '<li class="lierr" data-ln="' + x.ln + '" data-col="' + x.col +
         '"><span>' + escapeHtml(x.msg) + '</span></li>';
     } else {
       return '<li><span>' + escapeHtml(x.msg) + '</span></li>';
@@ -259,14 +259,13 @@ function parse() {
 
   const grammar_fname_base = "grammar";
   const grammar_fname_ext = ".ebnf";
-  const code_fname_ext = ".js";
   let grammar_fname = grammar_fname_base + grammar_fname_ext;
-  if (FS.findObject(grammar_fname))
-    FS.unlink(grammar_fname);
+  let file_list = FS.readdir("/");
+  for(let idx in file_list) {
+	let fname = file_list[idx];
+	if(fname.toLowerCase().indexOf(grammar_fname_base) == 0) FS.unlink(fname);
+  }
   FS.createDataFile("/", grammar_fname, grammarText, true, true, true);
-  let code_fname = grammar_fname_base + code_fname_ext;
-  if (FS.findObject(code_fname))
-      FS.unlink(code_fname);
 
   window.setTimeout(() => {
     $('#overlay').css({
@@ -277,8 +276,8 @@ function parse() {
     output = "parse_status";
     let rc;
     //rc = run_argc_argv(_main, ["rex", grammar_fname, "-javascript", "-main", "-ll", "3", "-name", "ns", "-a", "ca"]);
-    let cmd_line = ["rex", grammar_fname, "-javascript", "-main", "-ll", "3", "-backtrack"];
-    outputs[output] += "<pre>cmd: " + cmd_line.join(" ") + "</pre>";
+    let cmd_line = ["rex", grammar_fname].concat(getCmdLine()); // "-javascript", "-main", "-ll", "3", "-backtrack"];
+    outputs[output] += "cmd: " + cmd_line.join(" ") + "\n";
     rc = run_argc_argv(_main, cmd_line);
     //rex_generator(grammarText, (RO_ll | RO_main | RO_javascript), 3, "ns", "ca");
 
@@ -286,13 +285,24 @@ function parse() {
     if (rc == 0) {
       $grammarValidation.removeClass('validation-invalid').show();
       $codeValidation.removeClass('validation-invalid').show();
-      //$grammarInfo.html('<pre>' + FS.readdir("/") + '</pre>');
-      codeCode.getSession().setMode("ace/mode/javascript");
-      codeCode.setValue(FS.readFile(code_fname, { encoding: 'utf8' }));
+      //$codeInfo.html('<pre>' + FS.readdir("/") + '</pre>');
+      let file_list = FS.readdir("/");
+      for(let idx in file_list) {
+	let fname = file_list[idx];
+	if(fname.toLowerCase().indexOf(grammar_fname_base) == 0) {
+		if(fname.indexOf(grammar_fname_ext) < 0) {
+			//codeCode.getSession().setMode("ace/mode/javascript");
+			codeCode.setValue(FS.readFile(fname, { encoding: 'utf8' }));
+			break;
+		}
+	}
+      }
     }
 
     if (outputs.parse_status.length > 0) {
-      $grammarInfo.html("<pre>" + outputs.parse_status + "</pre>");
+      const errors = textToErrors(outputs.parse_status);
+      const html = generateErrorListHTML(errors);
+      $grammarInfo.html(html);
     }
 
   }, 0);
@@ -316,9 +326,12 @@ codeEditor.getSession().on('change', setupTimer);
 function makeOnClickInInfo(editor) {
   return function () {
     const el = $(this);
-    editor.navigateTo(el.data('ln') - 1, el.data('col') - 1);
-    editor.scrollToLine(el.data('ln') - 1, true, false, null);
-    editor.focus();
+    const line = el.data('ln');
+    if(line) {
+      editor.navigateTo(line - 1, el.data('col') - 1);
+      editor.scrollToLine(line - 1, true, false, null);
+      editor.focus();
+    }
 
     if(el.data('gln') && el.data('gcol')) {
       grammarEditor.navigateTo(el.data('gln') - 1, el.data('gcol') - 1);
@@ -329,10 +342,96 @@ function makeOnClickInInfo(editor) {
 $('#grammar-info').on('click', 'li', makeOnClickInInfo(grammarEditor));
 $('#code-info').on('click', 'li', makeOnClickInInfo(codeEditor));
 
+//Command line helper
+function getCmdLine() {
+	let cmd_line_input = document.getElementById("command-line");
+	let value = cmd_line_input.value;
+	value = value.replace(/\s+/g, " ");
+	//console.log(cmd_line_input.value, value);
+	return value.split(' ');
+}
+function getCmdLineFromForm() {
+	let form = document.getElementById("cfg-cmd-form");
+	let cmd_line = [];
+	let elements = form.elements;
+
+	for (let i = 0;  i < elements.length; ++i) {
+		let element = elements[i];
+		switch(element.type) {
+			case "text":
+				if(element.value.length > 0) {
+					switch(element.name) {
+						case 'a':
+						case 'name':
+							cmd_line.push("-" +element.name);
+						break
+					}
+					cmd_line.push(element.value);
+				}
+			break;
+			case "checkbox":
+			case "radio":
+				if(element.checked && element.value.length > 0) cmd_line.push(element.value);
+			break;
+		}
+	}
+	return cmd_line;
+}
+function setCmdLine(elm) {
+	let cmd_line_input = document.getElementById("command-line");
+	cmd_line_input.value = getCmdLineFromForm().join(" ");
+}
+function showConfigure() {
+  let obj = $('#show-configure');
+  let display = obj.css( "display" );
+  if(display == "block") obj.css( "display", "none" );
+  else obj.css( "display", "block" );
+}
+
+function runJS() {
+/*
+  let jsText = codeCode.getValue();
+  let parseFuncName = jsText.match(/function (\S+)\(string\)/);
+  //console.log(parseFuncName);
+  if(parseFuncName) {
+    parseFuncName = parseFuncName[1];
+    jsText = jsText.replace("main(arguments);", "//main(arguments);");
+    jsText += "let jsInput = `\n" + codeEditor.getValue() + "\n`;\n";
+    jsText += `
+var parser = new grammar(jsInput);
+try
+{
+	parser.parse_Grammar();
+}
+catch (pe)
+{
+  if (! (pe instanceof parser.ParseException))
+  {
+     throw pe;
+  }
+  else
+  {
+     throw parser.getErrorMessage(pe);
+  }
+}
+`;
+	console.log(jsText);
+	try
+	{
+		window.eval(jsText);
+	}
+	catch (pe)
+	{
+		alert(pe)
+	}
+  }
+*/
+}
 // Event handing in the AST optimization
 $('#opt-mode').on('change', setupTimer);
 $('#start-rule').on('keydown', setupTimer);
 $('#parse').on('click', parse);
+$('#runjs').on('click', runJS);
 
 // Resize editors to fit their parents
 function resizeEditorsToParent() {
@@ -431,6 +530,21 @@ var Module = {
 };
 
 function doFinalSettings() {
+	let form = document.getElementById("cfg-cmd-form");
+	let elements = form.elements;
+	for (let i = 0;  i < elements.length; ++i) {
+		let element = elements[i];
+		switch(element.type) {
+			case "text":
+				element.onchange = setCmdLine;
+			break;
+			case "checkbox":
+			case "radio":
+				element.onclick = setCmdLine;
+			break;
+		}
+	}
+
 	let select_samples = document.getElementById('opt-samples');
 	sampleList.map( (lang, i) => {
            let opt = document.createElement("option");

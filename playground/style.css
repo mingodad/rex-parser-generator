@@ -62,7 +62,7 @@ body {
 .option input[type=checkbox] {
   margin-right: 4px;
 }
-.option .parse {
+.option .parse , .runjs {
   padding-left: 8px;
   padding-right: 8px;
   height: 24px;
@@ -98,4 +98,10 @@ body {
   cursor: wait;
   display: none;
   z-index: -1;
+}
+
+#show-configure{
+	display: none;
+	background-color: rgb(238, 238, 238);
+	font-size: small;
 }

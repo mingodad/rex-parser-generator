@@ -31,7 +31,7 @@
       <li><span>Input source</span></li>
       <li class="editor-options">
         <ul class="editor-header-options">
-          <li class="option"><label>Command line: </label><input id="start-rule" type="text"></li>
+          <li class="option"><label for="cfg-cmd-line"><input id="cfg-cmd-line" class="show-toggle" type="checkbox" onclick="showConfigure()">Command line: </label><input id="command-line" type="text" value="-ll 3 -javascript"></li>
           <li class="option"><button id="parse" class="parse">Parse</button></li>
 	  <li><a href="https://github.com/mingodad/rex-parser-generator/tree/dad-play"><svg height="26" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
     <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
@@ -39,8 +39,131 @@
         </ul>
       </li>
     </ul>
+  <div id="show-configure">
+	<form id="cfg-cmd-form" action="">
+	<table border="0">
+                <tbody><tr>
+                  <td valign="top">
+                    <table>
+                      <tbody><tr>
+                        <td class="hdr" align="right"><b>Algorithm:</b></td>
+                        <td class="hdr">
+                          <input type="radio" name="algorithm" value="-ll" checked="">LL<br>
+                          <input type="radio" name="algorithm" value="-lalr">LALR<br>
+                          <input type="radio" name="algorithm" value="-lr">LR<br>
+                          <span title="use GLR parsing (based on LALR or LR)">
+                          <input type="radio" name="algorithm" value="-glr">GLR<br>
+                          <input type="radio" name="algorithm" value="-glalr">GLALR<br>
+                          </span>
+                          <span title="number of tokens to look ahead">
+                            Lookahead: <input type="text" name="lookahead" value="3" size="1">
+                          </span><br>
+                          <span title="use PEG-style backtracking on LL conflicts">
+                            <input type="checkbox" name="backtrack" value="-backtrack">backtracking
+                          </span><br>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="hdr" align="right"><b>Optimize:</b></td>
+                        <td class="hdr">
+                          <input type="radio" name="optimize" value="-faster">speed<br>
+                          <input type="radio" name="optimize" value="-smaller">size<br>
+                          <input type="radio" name="optimize" value="" checked="">default
+                        </td>
+                      </tr>
+                    </tbody></table>
+                  </td>
+                  <td valign="top">
+                    <table>
+                      <tbody><tr>
+                        <td class="hdr" align="right"><b title="Select target language for code generation">Target:</b></td>
+                        <td class="hdr">
+                          <input type="radio" name="target" value="-cpp">C++<br>
+                          <input type="radio" name="target" value="-csharp">C#<br>
+                          <input type="radio" name="target" value="-go">Go<br>
+                          <input type="radio" name="target" value="-haxe">Haxe<br>
+                          <input type="radio" name="target" value="-java">Java<br>
+                          <input type="radio" name="target" value="-javascript">JavaScript<br>
+                          <input type="radio" name="target" value="-python">Python<br>
+                          <input type="radio" name="target" value="-scala">Scala<br>
+                          <input type="radio" name="target" value="-typescript">TypeScript<br>
+                          <input type="radio" name="target" value="-xquery">XQuery<br>
+                          <input type="radio" name="target" value="-xslt">XSLT<br>
+                          <input type="radio" name="target" value="-xml">XML<br>
+                          <input type="radio" name="target" value="" checked="">none
+                        </td>
+                      </tr>
+                    </tbody></table>
+                  </td>
+                  <td valign="top">
+                    <table>
+                      <tbody><tr>
+                        <td class="hdr" align="right"><b>Name/Namespace:</b></td>
+                        <td class="hdr">
+                          <span title="Target class name, possibly with package, or namespace,
+depending on target. Defaults to input name">
+                            <input type="text" name="name" value="" size="16">
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="hdr" align="right"><b>Generate code:</b></td>
+                        <td class="hdr">
+                          <input type="checkbox" name="tree" value="-tree">parse tree<br>
+                          <input type="checkbox" name="trace" value="-trace">tracing
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="hdr" align="right"><b>Code annotation:</b></td>
+                        <td class="hdr">
+                          <span title="Generate inline target code from annotations with specified label.">
+                            <input type="text" name="a" value="" size="16">
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="hdr" align="right"><b>Main program:</b></td>
+                        <td class="hdr">
+                          <input type="radio" name="main" value="-main">simple<br>
+                          <input type="radio" name="main" value="-performance">performance test<br>
+                          <input type="radio" name="main" value="" checked="">none
+                        </td>
+                      </tr>
+                    </tbody></table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td colspan="2">
+                    <table>
+                      <tbody><tr>
+                        <td class="hdr" align="right"><b title="Extra target options">Extras:</b></td>
+                        <td class="hdr">
+                          <span title="generate Saxon extension function code in Java (use with Saxon 11)">
+                            <input type="checkbox" name="saxon" value="-saxon">Saxon extension function
+                          </span>
+                          <br>
+                          <span title="generate BaseX extension function code in Java">
+                            <input type="checkbox" name="basex" value="-basex">BaseX extension function
+                          </span>
+                          <br>
+                          <span title="generate code for automatic semicolon insertion according to ECMAScript rules">
+                            <input type="checkbox" name="asi" value="-asi">automatic semicolon insertion
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody></table>
+                  </td>
+                </tr>
+              </tbody>
+	</table>
+	</form>
+    </div>
     <pre id="code-editor" class="editor-area">{{source}}</pre>
-    <div class="editor-sub-header"><label for="show-code"><input id="show-code" class="show-toggle" type="checkbox">Code</label></div>
+    <div class="editor-sub-header">
+      <label for="show-code"><input id="show-code" class="show-toggle" type="checkbox">Code</label>
+       <button id="runjs" class="runjs"> Run </button>
+      </div>
     <pre id="code-code" class="editor-area"></pre>
     <div class="editor-sub-header">
        <label for="show-output"><input id="show-output" class="show-toggle" type="checkbox">Output</label>
