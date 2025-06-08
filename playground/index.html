@@ -48,27 +48,27 @@
                       <tbody><tr>
                         <td class="hdr" align="right"><b>Algorithm:</b></td>
                         <td class="hdr">
-                          <input type="radio" name="algorithm" value="-ll" checked="">LL<br>
-                          <input type="radio" name="algorithm" value="-lalr">LALR<br>
-                          <input type="radio" name="algorithm" value="-lr">LR<br>
+                          <label><input type="radio" name="algorithm" value="-ll" checked="">LL</label><br>
+                          <label><input type="radio" name="algorithm" value="-lalr">LALR</label><br>
+                          <label><input type="radio" name="algorithm" value="-lr">LR</label><br>
                           <span title="use GLR parsing (based on LALR or LR)">
-                          <input type="radio" name="algorithm" value="-glr">GLR<br>
-                          <input type="radio" name="algorithm" value="-glalr">GLALR<br>
+                          <label><input type="radio" name="algorithm" value="-glr">GLR</label><br>
+                          <label><input type="radio" name="algorithm" value="-glalr">GLALR</label><br>
                           </span>
                           <span title="number of tokens to look ahead">
                             Lookahead: <input type="text" name="lookahead" value="3" size="1">
                           </span><br>
                           <span title="use PEG-style backtracking on LL conflicts">
-                            <input type="checkbox" name="backtrack" value="-backtrack">backtracking
+                            <label><input type="checkbox" name="backtrack" value="-backtrack">backtracking</label>
                           </span><br>
                         </td>
                       </tr>
                       <tr>
                         <td class="hdr" align="right"><b>Optimize:</b></td>
                         <td class="hdr">
-                          <input type="radio" name="optimize" value="-faster">speed<br>
-                          <input type="radio" name="optimize" value="-smaller">size<br>
-                          <input type="radio" name="optimize" value="" checked="">default
+                          <label><input type="radio" name="optimize" value="-faster">speed</label><br>
+                          <label><input type="radio" name="optimize" value="-smaller">size</label><br>
+                          <label><input type="radio" name="optimize" value="" checked="">default</label>
                         </td>
                       </tr>
                     </tbody></table>
@@ -78,20 +78,20 @@
                       <tbody><tr>
                         <td class="hdr" align="right"><b title="Select target language for code generation">Target:</b></td>
                         <td class="hdr">
-                          <input type="radio" name="target" value="-cpp">C++ w_char_t<br>
-                          <input type="radio" name="target" value="-cpp -char">C++ char<br>
-                          <input type="radio" name="target" value="-csharp">C#<br>
-                          <input type="radio" name="target" value="-go">Go<br>
-                          <input type="radio" name="target" value="-haxe">Haxe<br>
-                          <input type="radio" name="target" value="-java">Java<br>
-                          <input type="radio" name="target" value="-javascript">JavaScript<br>
-                          <input type="radio" name="target" value="-python">Python<br>
-                          <input type="radio" name="target" value="-scala">Scala<br>
-                          <input type="radio" name="target" value="-typescript">TypeScript<br>
-                          <input type="radio" name="target" value="-xquery">XQuery<br>
-                          <input type="radio" name="target" value="-xslt">XSLT<br>
-                          <input type="radio" name="target" value="-xml">XML<br>
-                          <input type="radio" name="target" value="" checked="">none
+                          <label><input type="radio" name="target" value="-cpp">C++ w_char_t</label><br>
+                          <label><input type="radio" name="target" value="-cpp -char">C++ char</label><br>
+                          <label><input type="radio" name="target" value="-csharp">C#</label><br>
+                          <label><input type="radio" name="target" value="-go">Go</label><br>
+                          <label><input type="radio" name="target" value="-haxe">Haxe</label><br>
+                          <label><input type="radio" name="target" value="-java">Java</label><br>
+                          <label><input type="radio" name="target" value="-javascript">JavaScript</label><br>
+                          <label><input type="radio" name="target" value="-python">Python</label><br>
+                          <label><input type="radio" name="target" value="-scala">Scala</label><br>
+                          <label><input type="radio" name="target" value="-typescript">TypeScript</label><br>
+                          <label><input type="radio" name="target" value="-xquery">XQuery</label><br>
+                          <label><input type="radio" name="target" value="-xslt">XSLT</label><br>
+                          <label><input type="radio" name="target" value="-xml">XML</label><br>
+                          <label><input type="radio" name="target" value="" checked="">none</label>
                         </td>
                       </tr>
                     </tbody></table>
@@ -110,8 +110,8 @@ depending on target. Defaults to input name">
                       <tr>
                         <td class="hdr" align="right"><b>Generate code:</b></td>
                         <td class="hdr">
-                          <input type="checkbox" name="tree" value="-tree">parse tree<br>
-                          <input type="checkbox" name="trace" value="-trace">tracing
+                          <label><input type="checkbox" name="tree" value="-tree">parse tree</label><br>
+                          <label><input type="checkbox" name="trace" value="-trace">tracing</label>
                         </td>
                       </tr>
                       <tr>
@@ -125,9 +125,9 @@ depending on target. Defaults to input name">
                       <tr>
                         <td class="hdr" align="right"><b>Main program:</b></td>
                         <td class="hdr">
-                          <input type="radio" name="main" value="-main">simple<br>
-                          <input type="radio" name="main" value="-performance">performance test<br>
-                          <input type="radio" name="main" value="" checked="">none
+                          <label><input type="radio" name="main" value="-main">simple</label><br>
+                          <label><input type="radio" name="main" value="-performance">performance test</label><br>
+                          <label><input type="radio" name="main" value="" checked="">none</label>
                         </td>
                       </tr>
                     </tbody></table>
@@ -141,15 +141,15 @@ depending on target. Defaults to input name">
                         <td class="hdr" align="right"><b title="Extra target options">Extras:</b></td>
                         <td class="hdr">
                           <span title="generate Saxon extension function code in Java (use with Saxon 11)">
-                            <input type="checkbox" name="saxon" value="-saxon">Saxon extension function
+                            <label><input type="checkbox" name="saxon" value="-saxon">Saxon extension function</label>
                           </span>
                           <br>
                           <span title="generate BaseX extension function code in Java">
-                            <input type="checkbox" name="basex" value="-basex">BaseX extension function
+                            <label><input type="checkbox" name="basex" value="-basex">BaseX extension function</label>
                           </span>
                           <br>
                           <span title="generate code for automatic semicolon insertion according to ECMAScript rules">
-                            <input type="checkbox" name="asi" value="-asi">automatic semicolon insertion
+                            <label><input type="checkbox" name="asi" value="-asi">automatic semicolon insertion</label>
                           </span>
                         </td>
                       </tr>
