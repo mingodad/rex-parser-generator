@@ -153,12 +153,12 @@ function nl2br(str) {
   return str.replace(/\n/g, '<br>\n')
 }
 
-function textToErrors(str) {
+function textToErrorsByRegex(str, errorRE) {
   let errors = [];
   var regExp = /([^\n]+?)\n/g, match;
   while (match = regExp.exec(str)) {
     let msg = match[1];
-    let line_col = msg.match(/error: line (\d+), column (\d+):/);
+    let line_col = msg.match(errorRE);
     if (line_col) {
       errors.push({"ln": line_col[1], "col":line_col[2], "msg": msg});
     } else {
@@ -166,6 +166,14 @@ function textToErrors(str) {
     }
   }
   return errors;
+}
+
+function grammarTextToErrors(str) {
+  return textToErrorsByRegex(str, /error: line (\d+), column (\d+):/);
+}
+
+function parseInputTextToErrors(str) {
+  return textToErrorsByRegex(str, /at line (\d+), column (\d+):/);
 }
 
 function generateErrorListHTML(errors) {
@@ -339,7 +347,7 @@ function parse() {
     }
 
     if (outputs.parse_status.length > 0) {
-      const errors = textToErrors(outputs.parse_status);
+      const errors = grammarTextToErrors(outputs.parse_status);
       const html = generateErrorListHTML(errors);
       $grammarInfo.html(html);
     }
@@ -429,43 +437,44 @@ function showConfigure() {
 }
 
 function runJS() {
-/*
-  let jsText = codeCode.getValue();
-  let parseFuncName = jsText.match(/function (\S+)\(string\)/);
-  //console.log(parseFuncName);
-  if(parseFuncName) {
-    parseFuncName = parseFuncName[1];
-    jsText = jsText.replace("main(arguments);", "//main(arguments);");
-    jsText += "let jsInput = `\n" + codeEditor.getValue() + "\n`;\n";
-    jsText += `
-var parser = new grammar(jsInput);
+	let jsInput = codeEditor.getValue();
+	let jsText = codeCode.getValue();
+	let grammarFunc = jsText.match(/function (\S[^(]*)\(string\)/);
+	let parseFunc = jsText.match(/this\.parse_(\S+) = function\(\)/);
+	jsText = jsText.replace(/\/\/ main program for use with node.js, rhino, or jrunscript.*/gi, "");
+	//console.log(grammarFunc[1],parseFunc[1], jsText);
+	let myParseFunc = `
+let parser = new grammar_XXX(input);
 try
 {
-	parser.parse_Grammar();
+	parser.parse_PXXXP();
 }
 catch (pe)
 {
-  if (! (pe instanceof parser.ParseException))
-  {
-     throw pe;
-  }
-  else
-  {
-     throw parser.getErrorMessage(pe);
-  }
+	if (! (pe instanceof parser.ParseException))
+	{
+		throw pe;
+	}
+	else
+	{
+		throw parser.getErrorMessage(pe);
+	}
 }
 `;
-	console.log(jsText);
-	try
-	{
-		window.eval(jsText);
+	myParseFunc = myParseFunc.replace("grammar_XXX", grammarFunc[1]);
+	myParseFunc = myParseFunc.replace("PXXXP", parseFunc[1]);
+	jsText += myParseFunc;
+
+	const func = new Function('input', jsText);
+	try {
+		func(jsInput);
+		$('#code-info').html("parsing: OK");
 	}
-	catch (pe)
-	{
-		alert(pe)
+	catch (pe) {
+		const errors = parseInputTextToErrors(pe);
+		const html = generateErrorListHTML(errors);
+		$('#code-info').html(html);
 	}
-  }
-*/
 }
 // Event handing in the AST optimization
 $('#opt-mode').on('change', setupTimer);
