@@ -276,7 +276,10 @@ function parse() {
     output = "parse_status";
     let rc;
     //rc = run_argc_argv(_main, ["rex", grammar_fname, "-javascript", "-main", "-ll", "3", "-name", "ns", "-a", "ca"]);
-    let cmd_line = ["rex", grammar_fname].concat(getCmdLine()); // "-javascript", "-main", "-ll", "3", "-backtrack"];
+    let user_cmd_line = getCmdLine();
+    let cmd_line = user_cmd_line.length > 0
+	? ["rex", grammar_fname].concat(user_cmd_line) // "-javascript", "-main", "-ll", "3", "-backtrack"];
+	: ["rex"]; //to show usage
     outputs[output] += "cmd: " + cmd_line.join(" ") + "\n";
     rc = run_argc_argv(_main, cmd_line);
     //rex_generator(grammarText, (RO_ll | RO_main | RO_javascript), 3, "ns", "ca");
@@ -347,6 +350,7 @@ function getCmdLine() {
 	let cmd_line_input = document.getElementById("command-line");
 	let value = cmd_line_input.value;
 	value = value.replace(/\s+/g, " ");
+	if(value == " " || value.length == 0) return [];
 	//console.log(cmd_line_input.value, value);
 	return value.split(' ');
 }
