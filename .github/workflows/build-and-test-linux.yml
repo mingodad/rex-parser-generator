@@ -10,8 +10,8 @@ on:
   pull_request:
     branches:
       - main
-  schedule:
-    - cron: '0 4 * * 6'
+  #schedule:
+  #  - cron: '0 4 * * 6'
 
 jobs:
   build:
